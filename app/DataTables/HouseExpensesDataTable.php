@@ -64,7 +64,16 @@ class HouseExpensesDataTable extends DataTable
                 Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
-            ])->initComplete('function () {
+            ])->createdRow('
+            function(row, data, dataIndex) {
+                $(row).find("td").addClass("text-center");
+            }
+        ')
+            ->headerCallback('
+        function(thead, data, start, end, display) {
+            $(thead).find("th").addClass("text-center");
+        }
+    ')->initComplete('function () {
                 this.api().columns().every(function () {
                 var column = this;
                 if (  ["تعديل", "حذف"].includes(column.header().innerText))
@@ -86,11 +95,6 @@ class HouseExpensesDataTable extends DataTable
     {
         return [
 
-            Column::make('id'),
-            Column::make('spender_name')->title('اسم المنفق'),
-            Column::make('expense_name')->title('انفق في'),
-            Column::make('amount')->title('المبلغ'),
-            Column::make('date')->title('التاريخ'),
             Column::computed('delete')->title('حذف')
                 ->exportable(false)
                 ->printable(false)
@@ -101,6 +105,10 @@ class HouseExpensesDataTable extends DataTable
                 ->printable(false)
                 ->width(60)
                 ->addClass('text-center'),
+            Column::make('date')->title('التاريخ'),
+            Column::make('amount')->title('المبلغ'),
+            Column::make('expense_name')->title('انفق في'),
+            Column::make('spender_name')->title('اسم المنفق'),
         ];
     }
 
