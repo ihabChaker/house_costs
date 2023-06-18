@@ -31,6 +31,7 @@ class HouseController extends Controller
         $expense->date = $request->input('date');
         $expense->house_name = $request->input('house_name');
         $expense->expense_name = $request->input('expense_name');
+        $expense->spender_name = $request->input('spender_name');
         $expense->save();
         return ['message' => 'expense saved successfully'];
     }
@@ -39,6 +40,7 @@ class HouseController extends Controller
         $houseExpense->amount = $request->input('amount');
         $houseExpense->date = $request->input('date');
         $houseExpense->expense_name = $request->input('expense_name');
+        $houseExpense->spender_name = $request->input('spender_name');
         $houseExpense->save();
         return ['message' => 'expense updated successfully'];
     }

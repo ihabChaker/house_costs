@@ -293,12 +293,12 @@ return [
         // Navbar items:
 
         [
-            'text' => 'House1 expenses',
+            'text' => 'مصاريف المنزل 1',
             'url' => 'house-expenses-1',
             'icon' => 'fas fa-house'
         ],
         [
-            'text' => 'House2 expenses',
+            'text' => 'مصاريف المنزل 2',
             'url' => 'house-expenses-2',
             'icon' => 'fas fa-house'
         ],

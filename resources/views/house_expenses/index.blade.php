@@ -14,6 +14,10 @@
                     <div class="modal-body">
                         <input type="hidden" name="id" id="edit-id">
                         <div class="form-group">
+                            <label for="edit-spender-name">اسم المنفق</label>
+                            <input type="text" name="name" id="edit-spender-name" class="form-control">
+                        </div>
+                        <div class="form-group">
                             <label for="edit-expense-name">انفق في</label>
                             <input type="text" name="name" id="edit-expense-name" class="form-control">
                         </div>
@@ -43,6 +47,10 @@
                 </div>
                 <form id="create-form">
                     <div class="modal-body">
+                        <div class="form-group">
+                            <label for="create-spender-name">اسم المنفق</label>
+                            <input type="text" name="name" id="create-spender-name" class="form-control">
+                        </div>
                         <div class="form-group">
                             <label for="create-expense-name">انفق في</label>
                             <input type="text" name="name" id="create-expense-name" class="form-control">
@@ -87,9 +95,9 @@
 @stop
 
 @section('css')
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/js/app.js'])
 
-    <link rel="stylesheet" href="/css/admin_custom.css">
+    <link rel="stylesheet" href="{{ asset('css/admin_custom.css') }}">
 @stop
 @section('plugins.Datatables', true)
 @section('plugins.Toastr', true)
@@ -102,6 +110,7 @@
         $(document).on('click', '.edit-btn', function() {
             $('#edit-id').val($(this).data('id'));
             $('#edit-expense-name').val($(this).data('expense_name'));
+            $('#edit-spender-name').val($(this).data('spender_name'));
             $('#edit-amount').val($(this).data('amount'));
             $('#edit-date').val($(this).data('date'));
         });
@@ -109,12 +118,14 @@
             event.preventDefault();
             let id = $('#edit-id').val();
             let expense_name = $('#edit-expense-name').val();
+            let spender_name = $('#edit-spender-name').val();
             let amount = $('#edit-amount').val();
             let date = $('#edit-date').val();
             axios.patch('{{ route('house-expenses.update', ['house_expense' => 0]) }}' + id, {
                     amount,
                     date,
-                    expense_name
+                    expense_name,
+                    spender_name
                 })
                 .then(function(response) {
                     toastr.success(response.data.message);
@@ -127,10 +138,12 @@
         $('#create-form').submit(function(event) {
             event.preventDefault();
             let expense_name = $('#create-expense-name').val();
+            let spender_name = $('#create-spender-name').val();
             let amount = $('#create-amount').val();
             let date = $('#create-date').val();
             axios.post('{{ route('house-expenses.store') }}', {
                     expense_name,
+                    spender_name,
                     amount,
                     date,
                     house_name: '{{ $house }}'
