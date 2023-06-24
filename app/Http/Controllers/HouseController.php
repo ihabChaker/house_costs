@@ -11,17 +11,21 @@ class HouseController extends Controller
     public function indexHouse1()
     {
         $house = 'house1';
+        $sum_expenses =  HouseExpense::where('house_name', '=', 'house1')->sum('amount');
         $houseExpensesDataTable = new HouseExpensesDataTable($house);
         return $houseExpensesDataTable->render('house_expenses.index', [
-            'house' => $house
+            'house' => $house,
+            'sum_expenses' => $sum_expenses,
         ]);
     }
     public function indexHouse2()
     {
         $house = 'house2';
+        $sum_expenses =  HouseExpense::where('house_name', '=', 'house2')->sum('amount');
         $houseExpensesDataTable = new HouseExpensesDataTable($house);
         return $houseExpensesDataTable->render('house_expenses.index', [
-            'house' => $house
+            'house' => $house,
+            'sum_expenses' => $sum_expenses,
         ]);
     }
     public function store(Request $request)
@@ -31,7 +35,7 @@ class HouseController extends Controller
         $expense->date = $request->input('date');
         $expense->house_name = $request->input('house_name');
         $expense->expense_name = $request->input('expense_name');
-        $expense->spender_name = $request->input('spender_name');
+        $expense->spender_id = $request->input('spender_id');
         $expense->save();
         return ['message' => 'expense saved successfully'];
     }
@@ -40,7 +44,7 @@ class HouseController extends Controller
         $houseExpense->amount = $request->input('amount');
         $houseExpense->date = $request->input('date');
         $houseExpense->expense_name = $request->input('expense_name');
-        $houseExpense->spender_name = $request->input('spender_name');
+        $houseExpense->spender_id = $request->input('spender_id');
         $houseExpense->save();
         return ['message' => 'expense updated successfully'];
     }

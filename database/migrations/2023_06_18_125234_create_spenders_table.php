@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('house_expenses', function (Blueprint $table) {
+        Schema::create('spenders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('spender_id');
-            $table->string('expense_name');
-            $table->string('amount');
-            $table->string('house_name');
-            $table->date('date');
+            $table->string("name");
             $table->timestamps();
         });
     }
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('house_expenses');
+        Schema::dropIfExists('spenders');
     }
 };

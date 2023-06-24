@@ -3,6 +3,7 @@
 @section('title', 'النفقات')
 
 @section('content')
+    <h3>مجموع ما انفق على المنزل {{ $sum_expenses }} دينار</h3>
     <div class="modal fade" id="edit-modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -14,8 +15,9 @@
                     <div class="modal-body">
                         <input type="hidden" name="id" id="edit-id">
                         <div class="form-group">
-                            <label for="edit-spender-name">اسم المنفق</label>
-                            <input type="text" name="name" id="edit-spender-name" class="form-control">
+                            <select name="edit_spender" id="edit_spender_select" class="form-control select2">
+                            </select>
+                            <label for="edit_spender_select">اسم المنفق</label>
                         </div>
                         <div class="form-group">
                             <label for="edit-expense-name">انفق في</label>
@@ -48,8 +50,9 @@
                 <form id="create-form">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="create-spender-name">اسم المنفق</label>
-                            <input type="text" name="name" id="create-spender-name" class="form-control">
+                            <select name="create_spender" id="create_spender_select" class="form-control select2">
+                            </select>
+                            <label for="create_spender_select">اسم المنفق</label>
                         </div>
                         <div class="form-group">
                             <label for="create-expense-name">انفق في</label>
@@ -107,25 +110,92 @@
 
 @section('js')
     <script>
+        $(document).ready(function() {
+            $('#create_spender_select').select2({
+                placeholder: "Select an option",
+                allowClear: true,
+                minimumInputLength: 2,
+                delay: true,
+                cache: true,
+                ajax: {
+                    url: "{{ route('select.spenders') }}",
+                    dataType: 'json',
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.data, function({
+                                text,
+                                id
+                            }) {
+                                return {
+                                    text,
+                                    id
+                                }
+                            }),
+                            pagination: {
+                                more: data.next_page_url
+                            }
+                        };
+                    }
+                }
+            });
+            $('#edit_spender_select').select2({
+                placeholder: "Select an option",
+                allowClear: true,
+                minimumInputLength: 2,
+                delay: true,
+                cache: true,
+                ajax: {
+                    url: "{{ route('select.spenders') }}",
+                    dataType: 'json',
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.data, function({
+                                text,
+                                id
+                            }) {
+                                return {
+                                    text,
+                                    id
+                                }
+                            }),
+                            pagination: {
+                                more: data.next_page_url
+                            }
+                        };
+                    }
+                }
+            });
+        })
         $(document).on('click', '.edit-btn', function() {
             $('#edit-id').val($(this).data('id'));
             $('#edit-expense-name').val($(this).data('expense_name'));
-            $('#edit-spender-name').val($(this).data('spender_name'));
             $('#edit-amount').val($(this).data('amount'));
             $('#edit-date').val($(this).data('date'));
+            $('#edit_spender_select').val('').trigger('change');
+            let option = new Option($(this).data('spender_name'), $(this).data('spender_id'), true, true);
+            $('#edit_spender_select').append(option).trigger('change');
+            $('#edit_spender_select').trigger({
+                type: 'select2:select',
+                params: {
+                    data: {
+                        id: $(this).data('spender_id'),
+                        text: $(this).data('spender_name')
+                    }
+                }
+            });
         });
         $('#edit-form').submit(function(event) {
             event.preventDefault();
             let id = $('#edit-id').val();
             let expense_name = $('#edit-expense-name').val();
-            let spender_name = $('#edit-spender-name').val();
+            let spender_id = $('#edit_spender_select').val();
             let amount = $('#edit-amount').val();
             let date = $('#edit-date').val();
             axios.patch('{{ route('house-expenses.update', ['house_expense' => 0]) }}' + id, {
                     amount,
                     date,
                     expense_name,
-                    spender_name
+                    spender_id
                 })
                 .then(function(response) {
                     toastr.success(response.data.message);
@@ -138,12 +208,12 @@
         $('#create-form').submit(function(event) {
             event.preventDefault();
             let expense_name = $('#create-expense-name').val();
-            let spender_name = $('#create-spender-name').val();
+            let spender_id = $('#create_spender_select').val();
             let amount = $('#create-amount').val();
             let date = $('#create-date').val();
             axios.post('{{ route('house-expenses.store') }}', {
                     expense_name,
-                    spender_name,
+                    spender_id,
                     amount,
                     date,
                     house_name: '{{ $house }}'

@@ -31,9 +31,11 @@ class HouseExpensesDataTable extends DataTable
                 return '<a  class="btn btn-danger delete-record" onClick="sendDeleteRequest(\'' . route('house-expenses.destroy', $data->id) . '\')"><i class="fas fa-trash"></i></a>';
             })
             ->addColumn('update', function ($data) {
-                return '<a href="#" data-toggle="modal" data-target="#edit-modal" data-id="' . $data->id . '" data-expense_name="' . $data->expense_name . '" data-spender_name="' . $data->spender_name . '" data-amount="' . $data->amount . '"  data-date="' . $data->date . '"  data-amount="' . $data->amount . '" class="btn btn-xs btn-primary edit-btn"><i class="fas fa-pen"></i></a>';
+                return '<a href="#" data-toggle="modal" data-target="#edit-modal" data-id="' . $data->id . '" data-expense_name="' . $data->expense_name . '" data-spender_name="' . $data->spender->name . '" data-spender_id="' . $data->spender->id . '" data-amount="' . $data->amount . '"  data-date="' . $data->date . '"  data-amount="' . $data->amount . '" class="btn btn-xs btn-primary edit-btn"><i class="fas fa-pen"></i></a>';
             })
-
+            ->addColumn('total', function ($data) {
+                return $data->spender->expenses->where('house_name', '=', $this->house)->sum("amount");
+            })
             ->rawColumns(['delete', 'update',]);
     }
 
@@ -42,7 +44,7 @@ class HouseExpensesDataTable extends DataTable
      */
     public function query(HouseExpense $model): QueryBuilder
     {
-        return $model->where('house_name', '=', $this->house)->newQuery();
+        return $model->with(["spender", 'spender.expenses'])->where('house_name', '=', $this->house)->newQuery();
     }
 
     /**
@@ -105,10 +107,11 @@ class HouseExpensesDataTable extends DataTable
                 ->printable(false)
                 ->width(60)
                 ->addClass('text-center'),
+            Column::make('total')->title('المجموع'),
             Column::make('date')->title('التاريخ'),
             Column::make('amount')->title('المبلغ'),
             Column::make('expense_name')->title('انفق في'),
-            Column::make('spender_name')->title('اسم المنفق'),
+            Column::make('spender.name')->title('اسم المنفق'),
         ];
     }
 
