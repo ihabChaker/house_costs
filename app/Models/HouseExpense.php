@@ -13,4 +13,9 @@ class HouseExpense extends Model
     {
         return $this->belongsTo(Spender::class, 'spender_id');
     }
+
+    public function dashboardExpense()
+    {
+        return $this->setConnection('mysql1')->hasOne(Expense::class, 'house_expense_id');
+    }
 }
