@@ -11,7 +11,7 @@ class HouseExpense extends Model
     protected $fillable = ['expense_name', 'house_name', 'amount', 'date', 'spender_id'];
     public function spender()
     {
-        return $this->belongsTo(Spender::class, 'spender_id');
+        return $this->belongsTo(Employee::class, 'spender_id');
     }
 
     public function dashboardExpense()

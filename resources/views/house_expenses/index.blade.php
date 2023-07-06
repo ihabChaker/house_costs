@@ -118,7 +118,7 @@
                 delay: true,
                 cache: true,
                 ajax: {
-                    url: "{{ route('select.spenders') }}",
+                    url: "{{ route('select.employees') }}",
                     dataType: 'json',
                     processResults: function(data) {
                         return {
@@ -145,7 +145,7 @@
                 delay: true,
                 cache: true,
                 ajax: {
-                    url: "{{ route('select.spenders') }}",
+                    url: "{{ route('select.employees') }}",
                     dataType: 'json',
                     processResults: function(data) {
                         return {

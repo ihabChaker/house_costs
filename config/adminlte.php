@@ -291,12 +291,6 @@ return [
 
     'menu' => [
         // Navbar items:
-
-        [
-            'text' => 'المنفقون',
-            'url' => 'spenders',
-            'icon' => 'fas fa-avatar'
-        ],
         [
             'text' => 'مصاريف المنزل 1',
             'url' => 'house-expenses-1',

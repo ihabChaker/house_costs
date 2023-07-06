@@ -86,7 +86,9 @@ class HouseExpensesDataTable extends DataTable
                 $(input).appendTo($(column.header()))
                 .on("change", function () {
                     column.search($(this).val(), false, false, true).draw();
-                }); });                
+                }); }); 
+                $("html, body").animate({ scrollLeft: $(document).width() }, 0);
+                window.scrollTo($(document).width(), 0);                    
             }');
     }
 
