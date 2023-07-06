@@ -52,3 +52,17 @@ async function sendDeleteRequest(url) {
             showMessage("Error!", "حدث خطأ", statusesEnum.ERROR);
         });
 }
+function formatNumber(input) {
+    if (isNaN(parseInt(input.value))) {
+        input.value = 0
+        return;
+    }
+    let value = parseInt(input.value.replace(/,/g, ''));
+    let formattedValue = value.toLocaleString();
+    input.value = formattedValue;
+}
+
+function parseFormattedNumber(str) {
+    let value = parseInt(str.replace(/,/g, ''));
+    return value
+}

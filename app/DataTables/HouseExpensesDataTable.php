@@ -33,9 +33,14 @@ class HouseExpensesDataTable extends DataTable
             ->addColumn('update', function ($data) {
                 return '<a href="#" data-toggle="modal" data-target="#edit-modal" data-id="' . $data->id . '" data-expense_name="' . $data->expense_name . '" data-spender_name="' . $data->spender->name . '" data-spender_id="' . $data->spender->id . '" data-amount="' . $data->amount . '"  data-date="' . $data->date . '"  data-amount="' . $data->amount . '" class="btn btn-xs btn-primary edit-btn"><i class="fas fa-pen"></i></a>';
             })
-            ->addColumn('total', function ($data) {
-                return $data->spender->expenses->where('house_name', '=', $this->house)->sum("amount");
-            })
+            ->addColumn(
+                'total',
+                fn($data) => number_format($data->spender->expenses->where('house_name', '=', $this->house)->sum("amount"), 0, ',')
+            )
+            ->addColumn(
+                'amount',
+                fn($data) => number_format($data->amount, 0, ',')
+            )
             ->rawColumns(['delete', 'update',]);
     }
 

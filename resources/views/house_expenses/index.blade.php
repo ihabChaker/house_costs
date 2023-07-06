@@ -25,7 +25,8 @@
                         </div>
                         <div class="form-group">
                             <label for="edit-amount">المبلغ</label>
-                            <input type="number" name="amount" id="edit-amount" class="form-control">
+                            <input type="text" oninput="formatNumber(this)" name="amount" id="edit-amount"
+                                class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="edit-date">التاريخ</label>
@@ -60,7 +61,8 @@
                         </div>
                         <div class="form-group">
                             <label for="create-amount">المبلغ</label>
-                            <input type="number" name="amount" id="create-amount" class="form-control">
+                            <input type="text" oninput="formatNumber(this)" name="amount" id="create-amount"
+                                class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="create-date">التاريخ</label>
@@ -169,7 +171,7 @@
         $(document).on('click', '.edit-btn', function() {
             $('#edit-id').val($(this).data('id'));
             $('#edit-expense-name').val($(this).data('expense_name'));
-            $('#edit-amount').val($(this).data('amount'));
+            $('#edit-amount').val($(this).data('amount').toLocaleString());
             $('#edit-date').val($(this).data('date'));
             $('#edit_spender_select').val('').trigger('change');
             let option = new Option($(this).data('spender_name'), $(this).data('spender_id'), true, true);
@@ -189,7 +191,7 @@
             let id = $('#edit-id').val();
             let expense_name = $('#edit-expense-name').val();
             let spender_id = $('#edit_spender_select').val();
-            let amount = $('#edit-amount').val();
+            let amount = parseFormattedNumber($('#edit-amount').val());
             let date = $('#edit-date').val();
             axios.patch('{{ route('house-expenses.update', ['house_expense' => 0]) }}' + id, {
                     amount,
@@ -209,7 +211,7 @@
             event.preventDefault();
             let expense_name = $('#create-expense-name').val();
             let spender_id = $('#create_spender_select').val();
-            let amount = $('#create-amount').val();
+            let amount = parseFormattedNumber($('#create-amount').val());
             let date = $('#create-date').val();
             axios.post('{{ route('house-expenses.store') }}', {
                     expense_name,
