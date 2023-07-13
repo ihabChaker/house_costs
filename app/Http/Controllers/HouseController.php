@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\HouseExpensesDataTable;
+use App\Http\Requests\StoreHouseExpenseRequest;
+use App\Http\Requests\UpdateHouseExpenseRequest;
 use App\Models\HouseExpense;
+use App\Services\HouseExpenseService;
 use Illuminate\Http\Request;
 
 class HouseController extends Controller
@@ -28,35 +31,24 @@ class HouseController extends Controller
             'sum_expenses' => $sum_expenses,
         ]);
     }
-    public function store(Request $request)
+    public function store(StoreHouseExpenseRequest $request, HouseExpenseService $houseExpenseService)
     {
-        $expense = new HouseExpense();
-        $expense->amount = $request->input('amount');
-        $expense->date = $request->input('date');
-        $expense->house_name = $request->input('house_name');
-        $expense->expense_name = $request->input('expense_name');
-        $expense->spender_id = $request->input('spender_id');
-        $expense->save();
-        DashboardExpenseController::store($request, $expense->id);
-        return ['message' => 'expense saved successfully'];
-    }
-    public function update(Request $request, HouseExpense $houseExpense)
-    {
-        $houseExpense->amount = $request->input('amount');
-        $houseExpense->date = $request->input('date');
-        $houseExpense->expense_name = $request->input('expense_name');
-        $houseExpense->spender_id = $request->input('spender_id');
-        $houseExpense->save();
-        $dashboardExpense = $houseExpense->dashboardExpense;
-        DashboardExpenseController::update($dashboardExpense, $request, $houseExpense->id);
+        $validated_data = $request->validated();
+        $message = $houseExpenseService->store($validated_data);
 
-        return ['message' => 'expense updated successfully'];
+        return $message;
     }
-    public function destroy(Request $request, HouseExpense $houseExpense)
+    public function update(UpdateHouseExpenseRequest $request, HouseExpense $houseExpense, HouseExpenseService $houseExpenseService)
     {
-        $houseExpense->delete();
-        $houseExpense->dashboardExpense()->delete();
+        $validated_data = $request->validated();
+        $message = $houseExpenseService->update($houseExpense, $validated_data);
 
-        return ['message' => 'expense deleted successfully'];
+        return $message;
+    }
+    public function destroy(HouseExpense $houseExpense, HouseExpenseService $houseExpenseService)
+    {
+        $message = $houseExpenseService->delete($houseExpense);
+
+        return $message;
     }
 }

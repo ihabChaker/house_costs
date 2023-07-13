@@ -10,6 +10,6 @@ class Expense extends Model
     use HasFactory;
     protected $connection = 'mysql1';
 
-    protected $fillable = ['name', 'amount', 'house_expense_id', 'spended_by'];
+    protected $fillable = ['name', 'amount', 'house_expense_id', 'spender_id'];
 
 }
