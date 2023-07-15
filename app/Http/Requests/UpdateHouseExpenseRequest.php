@@ -24,9 +24,17 @@ class UpdateHouseExpenseRequest extends FormRequest
         return [
             'amount' => 'required|numeric',
             'date' => 'required|date',
-            'house_name' => 'required|string',
             'expense_name' => 'required|string',
             'spender_id' => 'required|exists:mysql1.employees,id'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'amount' => 'المبلغ',
+            'expense_name' => 'انفق في',
+            'spender_id' => 'اسم المنفق'
         ];
     }
 }

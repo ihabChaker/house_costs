@@ -31,6 +31,7 @@ class HouseExpenseTest extends TestCase
     {
         $house_expense = HouseExpense::factory()->create();
         $new_data = HouseExpense::factory()->make()->toArray();
+        info(route('house-expenses.update', ['house_expense' => $house_expense]));
         $response = $this->withoutMiddleware(VerifyCsrfToken::class)
             ->patchJson(route('house-expenses.update', ['house_expense' => $house_expense]), $new_data);
 

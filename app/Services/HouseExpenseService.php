@@ -30,7 +30,6 @@ class HouseExpenseService
         $houseExpense->update([
             'amount' => $data['amount'],
             'date' => $data['date'],
-            'house_name' => $data['house_name'],
             'expense_name' => $data['expense_name'],
             'spender_id' => $data['spender_id'],
         ]);

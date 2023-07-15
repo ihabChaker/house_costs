@@ -35,7 +35,7 @@ class HouseExpensesDataTable extends DataTable
             })
             ->addColumn(
                 'total',
-                fn($data) => number_format($data->spender->expenses->where('house_name', '=', $this->house)->sum("amount"), 0, ',')
+                fn($data) => number_format($data->spender->expenses->sum("amount"), 0, ',')
             )
             ->addColumn(
                 'amount',
@@ -49,7 +49,11 @@ class HouseExpensesDataTable extends DataTable
      */
     public function query(HouseExpense $model): QueryBuilder
     {
-        return $model->with(["spender", 'spender.expenses'])->where('house_name', '=', $this->house)->newQuery();
+        return $model->where('house_name', '=', $this->house)->with([
+            'spender.expenses' => function ($query) {
+                $query->where('house_name', '=', $this->house);
+            }
+        ])->newQuery();
     }
 
     /**
@@ -84,16 +88,16 @@ class HouseExpensesDataTable extends DataTable
                 this.api().columns().every(function () {
                 var column = this;
                 if (  ["تعديل", "حذف"].includes(column.header().innerText))
-                    return; 
+                    return;
                 var input = document.createElement("input");
                 var br = document.createElement("br");
                 $(br).appendTo($(column.header()))
                 $(input).appendTo($(column.header()))
                 .on("change", function () {
                     column.search($(this).val(), false, false, true).draw();
-                }); }); 
+                }); });
                 $("html, body").animate({ scrollLeft: $(document).width() }, 0);
-                window.scrollTo($(document).width(), 0);                    
+                window.scrollTo($(document).width(), 0);
             }');
     }
 
