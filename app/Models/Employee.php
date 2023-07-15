@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     use HasFactory;
-    protected $connection = "mysql1";
-    protected $table = "employees";
+    // protected $connection = "mysql1";
+    protected $table = "income_dashboard.employees";
     public function expenses()
     {
         return $this->setConnection('mysql')->hasMany(HouseExpense::class, 'spender_id');

@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Models\Expense;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -20,4 +21,11 @@ abstract class TestCase extends BaseTestCase
         $this->withoutExceptionHandling();
     }
 
+    protected function tearDown(): void
+    {
+        // Run your script here
+        // ...
+        Expense::query()->delete();
+        parent::tearDown();
+    }
 }
