@@ -18,7 +18,7 @@ class HouseController extends Controller
         $houseExpensesDataTable = new HouseExpensesDataTable($house);
         return $houseExpensesDataTable->render('house_expenses.index', [
             'house' => $house,
-            'sum_expenses' => $sum_expenses,
+            'sum_expenses' => number_format($sum_expenses, 0, ','),
         ]);
     }
     public function indexHouse2()
@@ -28,7 +28,7 @@ class HouseController extends Controller
         $houseExpensesDataTable = new HouseExpensesDataTable($house);
         return $houseExpensesDataTable->render('house_expenses.index', [
             'house' => $house,
-            'sum_expenses' => $sum_expenses,
+            'sum_expenses' => number_format($sum_expenses, 0, ','),
         ]);
     }
     public function store(StoreHouseExpenseRequest $request, HouseExpenseService $houseExpenseService)

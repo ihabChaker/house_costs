@@ -53,12 +53,12 @@ async function sendDeleteRequest(url) {
         });
 }
 function formatNumber(input) {
-    if (isNaN(parseInt(input.value))) {
+    if (isNaN(parseInt(input.value.replace(/,/g, '')))) {
         input.value = 0
         return;
     }
     let value = parseInt(input.value.replace(/,/g, ''));
-    let formattedValue = value.toLocaleString();
+    let formattedValue = value.toLocaleString("en");
     input.value = formattedValue;
 }
 

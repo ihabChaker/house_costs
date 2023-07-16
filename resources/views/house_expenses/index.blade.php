@@ -171,7 +171,7 @@
         $(document).on('click', '.edit-btn', function() {
             $('#edit-id').val($(this).data('id'));
             $('#edit-expense-name').val($(this).data('expense_name'));
-            $('#edit-amount').val($(this).data('amount').toLocaleString());
+            $('#edit-amount').val($(this).data('amount').toLocaleString("en"));
             $('#edit-date').val($(this).data('date'));
             $('#edit_spender_select').val('').trigger('change');
             let option = new Option($(this).data('spender_name'), $(this).data('spender_id'), true, true);
