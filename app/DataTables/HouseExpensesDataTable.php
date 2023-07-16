@@ -41,6 +41,12 @@ class HouseExpensesDataTable extends DataTable
                 'amount',
                 fn($data) => number_format($data->amount, 0, ',')
             )
+            ->filterColumn(
+                'amount',
+                function ($query, $input) {
+                    $query->where('amount', '=', $input);
+                }
+            )
             ->rawColumns(['delete', 'update',]);
     }
 
